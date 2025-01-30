@@ -1,11 +1,13 @@
 import streamlit as st
 from industry_layouts import render_manufacturing_dashboard, render_healthcare_dashboard
+from supply_chain_layout import render_supply_chain_dashboard
 from utils import initialize_session_state, render_sidebar
 from auth_pages import init_session_state, render_login_page, render_signup_page, render_logout_button, check_authentication
-from models import init_db
+from models import init_db, init_supply_chain_tables
 
 # Initialize database
 init_db()
+init_supply_chain_tables()
 
 # Page configuration
 st.set_page_config(
@@ -31,12 +33,15 @@ else:
     render_sidebar()
     render_logout_button()
 
-    # Main content based on selected industry and role
+    # Main content based on selected industry and view
     if st.session_state.authenticated:
-        if st.session_state.industry == 'Manufacturing':
-            render_manufacturing_dashboard()
-        elif st.session_state.industry == 'Healthcare':
-            render_healthcare_dashboard()
+        if st.session_state.current_view == 'Dashboard':
+            if st.session_state.industry == 'Manufacturing':
+                render_manufacturing_dashboard()
+            elif st.session_state.industry == 'Healthcare':
+                render_healthcare_dashboard()
+        elif st.session_state.current_view == 'Supply Chain':
+            render_supply_chain_dashboard()
 
         # Footer
         st.markdown("---")
