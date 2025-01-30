@@ -13,12 +13,12 @@ def init_session_state():
 
 def render_login_page():
     st.title('Guardian-IO Login')
-    
+
     with st.form('login_form'):
         username = st.text_input('Username')
         password = st.text_input('Password', type='password')
         submitted = st.form_submit_button('Login')
-        
+
         if submitted:
             user = verify_user(username, password)
             if user:
@@ -27,23 +27,29 @@ def render_login_page():
                 st.session_state.role = user['role']
                 st.session_state.industry = user['industry']
                 st.success('Login successful!')
-                st.experimental_rerun()
+                st.rerun()
             else:
                 st.error('Invalid username or password')
 
 def render_signup_page():
     st.title('Guardian-IO Signup')
-    
+
     with st.form('signup_form'):
         username = st.text_input('Username')
         password = st.text_input('Password', type='password')
         role = st.selectbox('Role', ['admin', 'analyst', 'viewer'])
         industry = st.selectbox('Industry', ['Manufacturing', 'Healthcare'])
         submitted = st.form_submit_button('Sign Up')
-        
+
         if submitted:
             if create_user(username, password, role, industry):
-                st.success('Account created successfully! Please login.')
+                # Automatically log in the user after successful signup
+                st.session_state.authenticated = True
+                st.session_state.username = username
+                st.session_state.role = role
+                st.session_state.industry = industry
+                st.success('Account created successfully! Redirecting to dashboard...')
+                st.rerun()
             else:
                 st.error('Username already exists')
 
@@ -51,7 +57,7 @@ def render_logout_button():
     if st.sidebar.button('Logout'):
         for key in ['authenticated', 'username', 'role', 'industry']:
             st.session_state[key] = None
-        st.experimental_rerun()
+        st.rerun()
 
 def check_authentication():
     return st.session_state.authenticated
