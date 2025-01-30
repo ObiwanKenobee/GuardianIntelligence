@@ -21,7 +21,7 @@ def render_sidebar():
         # View Selection
         view = st.radio(
             "Select View",
-            ['Dashboard', 'Supply Chain'],
+            ['Dashboard', 'Supply Chain', 'IoT Monitoring'],
             key='current_view'
         )
 
@@ -38,4 +38,4 @@ def render_sidebar():
         """)
 
         st.markdown("---")
-        st.markdown("v1.1.0 - Guardian-IO Dashboard")
+        st.markdown("v1.2.0 - Guardian-IO Dashboard")

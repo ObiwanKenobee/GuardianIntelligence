@@ -1,13 +1,15 @@
 import streamlit as st
 from industry_layouts import render_manufacturing_dashboard, render_healthcare_dashboard
 from supply_chain_layout import render_supply_chain_dashboard
+from iot_layout import render_iot_dashboard
 from utils import initialize_session_state, render_sidebar
 from auth_pages import init_session_state, render_login_page, render_signup_page, render_logout_button, check_authentication
-from models import init_db, init_supply_chain_tables
+from models import init_db, init_supply_chain_tables, init_iot_tables
 
 # Initialize database
 init_db()
 init_supply_chain_tables()
+init_iot_tables()
 
 # Page configuration
 st.set_page_config(
@@ -42,6 +44,8 @@ else:
                 render_healthcare_dashboard()
         elif st.session_state.current_view == 'Supply Chain':
             render_supply_chain_dashboard()
+        elif st.session_state.current_view == 'IoT Monitoring':
+            render_iot_dashboard()
 
         # Footer
         st.markdown("---")
